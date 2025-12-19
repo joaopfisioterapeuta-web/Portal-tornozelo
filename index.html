@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <title>Reabilitação Inteligente | Dr. João Paulo Cardozo</title>
-    <meta name="description" content="Portal oficial de recuperação acelerada de tornozelo. Guia passo a passo para pacientes.">
+    <meta name="description" content="Portal oficial de recuperação acelerada de tornozelo. Guia passo a passo.">
     
     <meta property="og:title" content="Portal do Paciente | Reabilitação de Tornozelo">
     <meta property="og:description" content="Acesse seu protocolo de exercícios e orientações guiadas pelo Dr. João Paulo.">
-    <meta property="og:image" content="https://img.freepik.com/free-photo/physiotherapist-doing-healing-treatment-broken-leg-patient-osteopathy-chiropractic-adjustments_657921-267.jpg"> <meta property="og:type" content="website">
+    <meta property="og:type" content="website">
     
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2250%22 fill=%22%232563eb%22/><text x=%2250%%22 y=%2250%%22 text-anchor=%22middle%22 fill=%22white%22 font-family=%22sans-serif%22 font-weight=%22900%22 font-size=%2245%22 dy=%22.35em%22>JP</text></svg>">
     <meta name="theme-color" content="#2563eb">
@@ -94,7 +94,6 @@
                     { id: 2, icon: "👣", title: "Fase 2: Mobilidade", sub: "Liberado pé no chão (Carga Parcial)" },
                     { id: 3, icon: "💪", title: "Fase 3: Força Total", sub: "Liberado peso total (Largar Muletas)" }
                 ],
-                // BLOCO DE DISCLAIMER MELHORADO
                 disclaimer: {
                     title: "Termos de Uso e Responsabilidade",
                     text: "Este aplicativo serve como guia de suporte e orientação domiciliar. Ele <strong>não substitui</strong> o julgamento clínico do seu médico ou fisioterapeuta presencial. Avance apenas se sentir segurança. Em caso de dúvidas ou dor persistente, suspenda os exercícios e procure ajuda profissional.",
@@ -104,19 +103,20 @@
             1: {
                 title: "FASE 1: 🛡️ Proteção",
                 subtitle: "Semanas 0 a 4",
-                intro: "Foco absoluto em desinchar e proteger a cirurgia. A regra aqui é: se dói, não faça. Vamos manter o sangue circulando sem forçar o tornozelo.",
-                // BLOCO DE ALERTA PROFISSIONAL
+                intro: "Foco absoluto em desinchar e proteger a cirurgia. O objetivo é manter o sangue circulando sem forçar o tornozelo.",
+                // ALERTA CORRIGIDO: REMOVIDO "ROXOS" E AJUSTADO TEXTO DE DOR
                 warning: {
                     title: "🚨 Sinais de Alerta (Triagem)",
-                    intro: "A dor no local da cirurgia é esperada. Porém, fique atento a estes sinais que NÃO são normais:",
+                    intro: "O desconforto no local da cirurgia é esperado. Porém, fique atento a estes sinais que NÃO são normais:",
                     items: [
                         { label: "Risco de Trombose", text: "Dor aguda isolada na <b>panturrilha</b> (batata da perna), inchaço repentino e rigidez muscular." },
                         { label: "Sinais de Infecção", text: "Ferida cirúrgica com secreção (pus), vermelhidão que se espalha ou febre acima de 37.5°C." },
-                        { label: "Circulação", text: "Dedos do pé ficando roxos, muito pálidos ou extremamente frios." }
+                        { label: "Circulação", text: "Dedos do pé ficando muito pálidos (brancos) ou extremamente frios." }
                     ],
                     footer: "Se notar algum destes, procure seu médico imediatamente."
                 },
-                regraOuro: "Regra de Ouro: 'Menos é Mais'. Se sentir pontadas na cirurgia, pare. Respeite o tempo do seu corpo.",
+                // REGRA DE OURO AJUSTADA
+                regraOuro: "Regra de Ouro: O desconforto leve é normal, mas 'pontadas' agudas na cirurgia não. Respeite o limite da dor.",
                 driveLink: "https://drive.google.com/file/d/1N7-q2EIOh5bYqCLatPmHZFw73GjCUK-E/view?usp=drivesdk",
                 achievements: [
                     "Ferida operatória está seca e limpa",
@@ -124,11 +124,12 @@
                     "Inchaço diminui pela manhã",
                     "Consigo mover os dedos livremente"
                 ],
+                // EXERCÍCIOS CORRIGIDOS (VOLTANDO AO PIANISTA)
                 sections: [
                     { name: "Protocolo Diário (Obrigatório)", desc: "🧊 Gelo: 20min a cada 4h.\n🦵 Elevação: Perna acima do coração 30min (3x/dia).\n🦶 Movimento: Mexer dedos sempre.", dosage: "Todo dia" },
                     { name: "1. Bombeamento (Pumps)", desc: "Puxe o pé para cima e para baixo. Funciona como um 'segundo coração' para desinchar.", dosage: "3x 20 reps" },
-                    { name: "2. Isometria Lateral", desc: "Empurre o pé para 'fora' contra a parede e para 'dentro' contra o outro pé, SEM mexer o tornozelo.", dosage: "10x 5 seg" },
-                    { name: "3. Agarrar Toalha (Garra)", desc: "Tente puxar uma toalha no chão usando apenas os dedos do pé. Fortalece o arco plantar.", dosage: "3x 15 reps" },
+                    { name: "2. Isometria Lateral", desc: "Empurre o pé para 'fora' contra a parede e para 'dentro' contra o outro pé, SEM mexer o tornozelo (apenas a força).", dosage: "10x 5 seg" },
+                    { name: "3. O 'Pianista' (Mobilidade)", desc: "Com a perna esticada, tente abrir bem os dedos dos pés e depois fechar com força (como se fosse agarrar algo).", dosage: "3x 15 reps" },
                     { name: "4. Elevação de Perna", desc: "Deitado, trave o joelho e levante a perna esticada. Fortalece coxa sem forçar o pé.", dosage: "3x 10 reps" },
                     { name: "5. Pé no Chão (Adaptação)", desc: "Sentado, apoie o pé no chão sem peso. Se ficar vermelho/latejar é normal (sangue descendo).", dosage: "2 min -> 15 min" }
                 ]
@@ -182,7 +183,6 @@
             const container = document.getElementById('phase-content');
             window.scrollTo({ top: 0, behavior: 'smooth' });
             
-            // Renderização da INTRO
             if (id === 0) {
                 const data = portalData[0];
                 container.innerHTML = `
@@ -227,14 +227,11 @@
                 return;
             }
 
-            // Renderização das FASES
             const data = portalData[id];
             
-            // Lógica para montar o HTML dos Alertas
             let warningHTML = '';
             if(data.warning) {
                 if(data.warning.items && Array.isArray(data.warning.items) && typeof data.warning.items[0] === 'object') {
-                    // Alerta Complexo (Fase 1)
                     warningHTML = `
                         <div class="mt-6 bg-red-50 border-l-4 border-red-400 rounded-r-2xl p-5 shadow-sm">
                             <div class="flex items-center gap-2 mb-3">
@@ -254,10 +251,8 @@
                         </div>
                     `;
                 } else if (data.warning.type === 'stop') {
-                     // Alerta de Bloqueio (Fase 3)
                      warningHTML = `<div class="mt-4 p-4 bg-red-50 border border-red-100 rounded-xl flex gap-3 items-center"><div class="text-2xl">⛔</div><div><p class="text-xs font-bold text-red-800 uppercase tracking-wider">${data.warning.title}</p><p class="text-xs text-red-600 mt-1">${data.warning.text}</p></div></div>`;
                 } else {
-                    // Alerta Simples (Fase 2)
                     warningHTML = `<div class="mt-4 p-4 bg-amber-50 border border-amber-100 rounded-xl flex gap-3 items-center"><div class="text-2xl">⚠️</div><div><p class="text-xs font-bold text-amber-800 uppercase tracking-wider">${data.warning.title}</p><p class="text-xs text-amber-700 mt-1">${data.warning.text}</p></div></div>`;
                 }
             }
