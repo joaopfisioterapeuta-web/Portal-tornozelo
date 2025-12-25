@@ -120,7 +120,7 @@
 
     <!-- LÓGICA JAVASCRIPT -->
     <script>
-        // --- DADOS DO APP (CONFIGURADO SEM PASTAS DE VÍDEO) ---
+        // --- DADOS DO APP (SEM LINKS DO DRIVE) ---
         const PORTAL_DATA = {
             0: {
                 title: "👋 Bem-vindo à sua Recuperação",
@@ -142,7 +142,6 @@
                 title: "FASE 1: 🛡️ Proteção",
                 subtitle: "Semanas 0 a 4",
                 intro: "Foco absoluto em desinchar e proteger a cirurgia. O objetivo é manter o sangue circulando sem forçar o tornozelo.",
-                driveLink: "https://drive.google.com/file/d/1N7-q2EIOh5bYqCLatPmHZFw73GjCUK-E/view?usp=drivesdk",
                 introVideoSource: "fase1_intro.mp4",
                 warning: {
                     title: "🚨 Sinais de Alerta (Triagem)",
@@ -169,7 +168,6 @@
                 title: "FASE 2: 👣 Mobilidade",
                 subtitle: "Carga Parcial Liberada",
                 intro: "Vamos recuperar o movimento de 90º do tornozelo e ensinar seu pé a receber peso novamente.",
-                driveLink: "https://drive.google.com/file/d/1aECf1_hLa0Xfyr_RHAvSQXT_GInZ7TqL/view?usp=drivesdk",
                 introVideoSource: "fase2_intro.mp4",
                 warning: { type: "info", title: "⚠️ Requisito de Segurança", text: "Só faça se o médico liberou Carga Parcial (pisar com auxílio)." },
                 achievements: [ "Pé atinge 90 graus", "Piso com carga parcial sem dor", "Uso tênis confortável", "Iniciei desmame muletas" ],
@@ -184,7 +182,6 @@
                 title: "FASE 3: 💪 Força Total",
                 subtitle: "Retorno à Vida Normal",
                 intro: "Foco em fortalecer a panturrilha e treinar o equilíbrio. Preparação para alta.",
-                driveLink: "https://drive.google.com/file/d/1s96n1p49pQJZC0OXRtFfHr0oVYTG4op2/view?usp=drivesdk",
                 introVideoSource: "fase3_intro.mp4",
                 warning: { type: "stop", title: "⛔ Requisito Obrigatório", text: "Exige liberação médica para CARGA TOTAL (pisar sem muletas)." },
                 achievements: [ "Degraus sem apoio", "Fico na ponta dos pés", "Equilíbrio num pé só", "Caminho sem mancar" ],
@@ -317,8 +314,6 @@
                         <div class="mb-6 rounded-2xl overflow-hidden shadow-lg bg-black aspect-video relative">
                             ${getVideoHTML(data.introVideoSource)}
                         </div>
-
-                        ${data.driveLink ? `<a href="${data.driveLink}" target="_blank" class="flex items-center justify-center gap-3 w-full bg-slate-900 text-white py-4 rounded-2xl shadow-xl active:scale-95 transition-all mb-6 group hover:bg-slate-800"><i data-lucide="external-link" class="w-4 h-4 group-hover:scale-110 transition-transform"></i><span class="font-black text-xs uppercase tracking-widest">Assistir Aula (Drive)</span></a>` : ''}
 
                         ${data.regraOuro ? `<div class="mb-4 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-r-xl shadow-sm"><p class="text-xs text-blue-900 font-bold">💎 ${data.regraOuro}</p></div>` : ''}
                         
