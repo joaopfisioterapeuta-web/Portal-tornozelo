@@ -1,36 +1,24 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   Play, 
-  Pause, 
-  RotateCcw, 
-  CheckCircle, 
+  Check, 
   ChevronRight, 
-  ChevronLeft, 
-  Info, 
-  Calendar, 
   Instagram, 
   Video, 
-  Home,
-  Clock,
-  Activity,
-  Lightbulb,
-  MessageCircle,
-  X,
-  Send,
-  Sparkles,
-  Loader2,
-  AlertTriangle,
-  StopCircle,
-  Check,
+  Lightbulb, 
+  MessageCircle, 
+  X, 
+  Send, 
+  Sparkles, 
+  Loader2, 
   Star,
-  FileVideo
+  RotateCcw // <--- ADICIONADO: Faltava esta importação
 } from 'lucide-react';
 
 // --- CONFIGURAÇÃO DA API GEMINI ---
 const apiKey = ""; // A chave será injetada automaticamente pelo ambiente
 
 // --- DADOS DO APLICATIVO ---
-// NOTA: Os vídeos agora apontam para a pasta local "/videos/"
 const PORTAL_DATA = {
   0: {
     type: "intro",
@@ -420,7 +408,14 @@ export default function App() {
   // Persistência simples
   useEffect(() => {
     const saved = localStorage.getItem('jp_portal_state');
-    if (saved) setUserState(JSON.parse(saved));
+    if (saved) {
+        try {
+            setUserState(JSON.parse(saved) || {});
+        } catch (e) {
+            console.error("Erro ao carregar estado", e);
+            setUserState({});
+        }
+    }
   }, []);
 
   const toggleAch = (key) => {
