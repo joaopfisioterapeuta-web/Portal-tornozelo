@@ -12,7 +12,7 @@ import {
   Sparkles, 
   Loader2, 
   Star,
-  RotateCcw // <--- ESTE É O ÍCONE QUE FALTAVA E CAUSAVA O ERRO
+  RotateCcw // CORREÇÃO: Este ícone agora está importado corretamente
 } from 'lucide-react';
 
 // --- CONFIGURAÇÃO DA API GEMINI ---
@@ -194,13 +194,9 @@ const PORTAL_DATA = {
 
 // --- COMPONENTES AUXILIARES ---
 
-// Novo Componente Universal de Vídeo (Aceita YouTube e Arquivos Locais)
+// Componente Universal de Vídeo
 const UniversalVideoPlayer = ({ source, title, isCompact = false }) => {
-  // Verifica se é um placeholder (não configurado)
   const isPlaceholder = !source || source.startsWith('VIDEO_ID');
-  
-  // Verifica se é um arquivo local (tem extensão ou caminho)
-  // Exemplo: "/videos/meuvideo.mp4" ou "meuvideo.mov"
   const isLocalFile = source && (source.includes('/') || source.includes('.') || source.startsWith('http'));
 
   if (isPlaceholder) return (
@@ -210,7 +206,6 @@ const UniversalVideoPlayer = ({ source, title, isCompact = false }) => {
     </div>
   );
 
-  // Renderiza Player Nativo (HTML5) para arquivos locais
   if (isLocalFile) {
     return (
       <div className={`relative w-full rounded-xl overflow-hidden shadow-lg bg-black ${isCompact ? 'pb-[40%]' : 'pb-[56.25%]'}`}>
@@ -227,7 +222,6 @@ const UniversalVideoPlayer = ({ source, title, isCompact = false }) => {
     );
   }
 
-  // Renderiza YouTube para IDs
   return (
     <div className={`relative w-full rounded-xl overflow-hidden shadow-lg bg-black ${isCompact ? 'pb-[40%]' : 'pb-[56.25%]'}`}>
       <iframe
@@ -357,7 +351,7 @@ const MotivationCard = () => {
   );
 };
 
-// --- COMPONENTE DE EXERCÍCIO ISOLADO ---
+// Componente de Exercício
 const ExerciseCard = ({ exercise, index }) => {
   const [showVideo, setShowVideo] = useState(false);
 
@@ -373,7 +367,6 @@ const ExerciseCard = ({ exercise, index }) => {
         </div>
         <p className="text-slate-500 text-xs leading-relaxed mb-4 pl-7 border-l-2 border-slate-100">{exercise.desc}</p>
         
-        {/* Card "Por que Fazer" */}
         <div className="ml-7 bg-amber-50 p-3 rounded-xl border border-amber-100 mb-4 flex gap-2">
           <Lightbulb size={16} className="text-amber-500 shrink-0 mt-0.5" />
           <p className="text-[11px] text-amber-800 leading-tight"><strong>Para que serve:</strong> {exercise.whyDoIt}</p>
@@ -387,7 +380,6 @@ const ExerciseCard = ({ exercise, index }) => {
         </button>
       </div>
       
-      {/* Player de Vídeo Expandível */}
       {showVideo && (
         <div className="bg-black p-2 animate-in slide-in-from-top-2">
           <UniversalVideoPlayer source={exercise.videoSource} title={exercise.name} />
@@ -404,7 +396,6 @@ export default function App() {
   const [userState, setUserState] = useState({});
   const [chatOpen, setChatOpen] = useState(false);
   
-  // Persistência simples
   useEffect(() => {
     const saved = localStorage.getItem('jp_portal_state');
     if (saved) {
@@ -423,7 +414,6 @@ export default function App() {
     localStorage.setItem('jp_portal_state', JSON.stringify(newState));
   };
 
-  // Cálculo de progresso
   const calculateProgress = () => {
     let total = 0, done = 0;
     Object.keys(PORTAL_DATA).forEach(key => {
@@ -452,6 +442,8 @@ export default function App() {
             <div>
               <span className="block text-[9px] font-black tracking-widest text-slate-400 uppercase">Fisioterapia</span>
               <span className="block text-xs font-black tracking-tighter text-slate-800 leading-none group-hover:text-blue-600 transition-colors">REABILITAÇÃO INTELIGENTE</span>
+              {/* INDICADOR DE VERSÃO PARA DEBUG */}
+              <span className="block text-[8px] text-green-600 font-bold">v3.0 (Corrigido)</span>
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -473,7 +465,6 @@ export default function App() {
       </header>
 
       <main className="max-w-2xl mx-auto px-6 py-6">
-        {/* NAVEGAÇÃO */}
         <nav className="flex gap-2 p-1 bg-slate-200 rounded-2xl mb-8 overflow-x-auto no-scrollbar shadow-inner sticky top-20 z-30">
           {[0, 1, 2, 3].map(id => (
             <button 
@@ -486,10 +477,8 @@ export default function App() {
           ))}
         </nav>
 
-        {/* CONTEÚDO */}
         <div className="animate-in fade-in duration-500">
           {activePhase === 0 ? (
-            // TELA INICIAL
             <div className="space-y-6">
               <MotivationCard />
               
@@ -531,14 +520,12 @@ export default function App() {
               </div>
             </div>
           ) : (
-            // TELAS DE FASE (1, 2, 3)
             <div>
               <div className="mb-8">
                 <span className="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-[10px] font-bold uppercase mb-2 tracking-wider shadow-sm">{currentData.subtitle}</span>
                 <h2 className="text-3xl font-black text-slate-900 leading-tight mb-3 tracking-tight">{currentData.title}</h2>
                 <p className="text-slate-600 text-sm leading-relaxed font-medium mb-6">{currentData.intro}</p>
                 
-                {/* VÍDEO DA FASE */}
                 <div className="mb-6 rounded-2xl overflow-hidden shadow-md">
                    <UniversalVideoPlayer source={currentData.introVideoSource} title={currentData.title} />
                 </div>
@@ -549,7 +536,6 @@ export default function App() {
                   </div>
                 )}
 
-                {/* AVISOS E ALERTAS */}
                 {currentData.warning && (
                    <div className={`mt-6 rounded-r-2xl p-5 shadow-sm border-l-4 ${currentData.warning.type === 'stop' ? 'bg-red-50 border-red-500' : 'bg-amber-50 border-amber-400'}`}>
                       {currentData.warning.items ? (
@@ -581,11 +567,9 @@ export default function App() {
                 )}
               </div>
 
-              {/* CHECKLIST */}
               <div className="mb-10 bg-white rounded-3xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-slate-100">
                 <div className="flex items-center justify-between mb-4 pb-4 border-b border-slate-50">
                    <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Checklist de Evolução</h3>
-                   {/* Contador de progresso da fase */}
                    <span className="text-[10px] font-black text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
                      {currentData.achievements.filter((_, i) => userState[`f${activePhase}_c${i}`]).length}/{currentData.achievements.length}
                    </span>
@@ -606,7 +590,6 @@ export default function App() {
                 </div>
               </div>
 
-              {/* LISTA DE EXERCÍCIOS */}
               <div className="space-y-6">
                  <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2 mb-4">Exercícios da Fase</h3>
                  {currentData.sections.map((ex, i) => (
@@ -618,10 +601,8 @@ export default function App() {
         </div>
       </main>
 
-      {/* BARRA INFERIOR FLUTUANTE */}
       <nav className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur border-t border-slate-200 p-4 z-50 safe-area-bottom shadow-[0_-5px_20px_rgba(0,0,0,0.05)]">
         <div className="max-w-2xl mx-auto flex items-center justify-between gap-4">
-           {/* Botão de Chat IA */}
            <div className="flex items-center gap-3 shrink-0" onClick={() => setChatOpen(true)}>
               <div className="w-10 h-10 rounded-full bg-green-100 text-green-600 flex items-center justify-center relative cursor-pointer hover:scale-110 transition-transform">
                  <MessageCircle size={20} />
@@ -633,7 +614,6 @@ export default function App() {
               </div>
            </div>
            
-           {/* Botão de Venda / Agendamento (Destaque) - AGORA COM TEXTO TRACKEADO */}
            <a 
               href="https://wa.me/5521972183072?text=Ol%C3%A1%20Dr.%20Jo%C3%A3o!%20Vim%20pelo%20App%20de%20Reabilita%C3%A7%C3%A3o%20e%20gostaria%20de%20saber%20mais%20sobre%20a%20Consultoria%20Premium." 
               target="_blank" 
