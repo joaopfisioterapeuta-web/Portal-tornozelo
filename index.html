@@ -12,7 +12,8 @@ import {
   Sparkles, 
   Loader2, 
   Star,
-  RotateCcw // <--- ADICIONADO: Faltava esta importação
+  RotateCcw, // <--- O ERRO ESTAVA AQUI: Este ícone faltava ser importado
+  FileVideo
 } from 'lucide-react';
 
 // --- CONFIGURAÇÃO DA API GEMINI ---
@@ -357,8 +358,7 @@ const MotivationCard = () => {
   );
 };
 
-// --- COMPONENTE DE EXERCÍCIO ISOLADO (CORREÇÃO DEFINTIVA ERRO 153) ---
-// Este componente DEVE ficar fora da função App
+// --- COMPONENTE DE EXERCÍCIO ISOLADO ---
 const ExerciseCard = ({ exercise, index }) => {
   const [showVideo, setShowVideo] = useState(false);
 
@@ -656,3 +656,5 @@ export default function App() {
     </div>
   );
 }
+
+
