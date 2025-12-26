@@ -604,7 +604,21 @@
 
         // INICIALIZAÇÃO
         window.onload = () => { renderPhase(0); };
-    </script>
+    </script><script>
+  // 1. Bloqueia o clique com o botão direito (evita "Salvar como" ou "Inspecionar")
+  document.addEventListener('contextmenu', event => event.preventDefault());
+
+  // 2. Bloqueia atalhos de teclado comuns de clonagem/inspeção
+  document.onkeydown = function(e) {
+    // Bloqueia F12, Ctrl+Shift+I, Ctrl+U (Ver código fonte) e Ctrl+S
+    if (e.keyCode == 123 || 
+        (e.ctrlKey && e.shiftKey && e.keyCode == 73) || 
+        (e.ctrlKey && e.keyCode == 85) || 
+        (e.ctrlKey && e.keyCode == 83)) {
+      return false;
+    }
+  };
+</script>
 </body>
 </html>
 
