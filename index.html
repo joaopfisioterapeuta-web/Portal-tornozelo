@@ -375,7 +375,7 @@
                             <h2 class="text-3xl font-black mb-4 leading-tight text-slate-800">${data.title}</h2>
                             <p class="text-slate-500 text-sm mb-6 font-medium">${data.intro}</p>
                             
-                            <div class="mb-6 rounded-2xl overflow-hidden shadow-lg bg-black aspect-video relative">
+                            <div class="mb-6 rounded-2xl overflow-hidden shadow-lg bg-black aspect-[9/16] relative max-w-xs mx-auto">
                                 ${getVideoHTML(data.videoSource)}
                             </div>
 
@@ -434,7 +434,7 @@
                         </div>` : ''}
 
                         ${hasVideo ? `
-                        <div id="vid-${idx}" class="hidden mb-4 bg-black rounded-xl overflow-hidden aspect-video">
+                        <div id="vid-${idx}" class="hidden mb-4 bg-black rounded-xl overflow-hidden aspect-[9/16] max-w-xs mx-auto">
                             ${getVideoHTML(ex.videoSource)}
                         </div>
                         <button onclick="toggleVideo('vid-${idx}')" class="w-full flex items-center justify-center gap-2 bg-slate-900 text-white py-3 rounded-xl text-[10px] font-black uppercase tracking-wider hover:bg-blue-600 transition-colors">
@@ -450,7 +450,7 @@
                         <h2 class="text-3xl font-black text-slate-900 leading-tight mb-3">${data.title}</h2>
                         <p class="text-slate-600 text-sm leading-relaxed font-medium mb-6">${data.intro}</p>
                         
-                        <div class="mb-6 rounded-2xl overflow-hidden shadow-lg bg-black aspect-video relative">
+                        <div class="mb-6 rounded-2xl overflow-hidden shadow-lg bg-black aspect-[9/16] relative max-w-xs mx-auto">
                             ${getVideoHTML(data.introVideoSource)}
                         </div>
 
