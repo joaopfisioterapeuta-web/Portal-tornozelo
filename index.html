@@ -36,6 +36,7 @@
             font-family: 'Inter', sans-serif; 
             background-color: #f8fafc; 
             padding-bottom: 120px;
+            /* UX Mobile: Previne seleção e remove delay de toque */
             -webkit-user-select: none;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
@@ -43,7 +44,14 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .fade-in { animation: fadeIn 0.4s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-        .progress-ring__circle { transition: stroke-dashoffset 0.6s cubic-bezier(0.4, 0, 0.2, 1); transform: rotate(-90deg); transform-origin: 50% 50%; }
+        
+        .progress-ring__circle { 
+            transition: stroke-dashoffset 0.6s cubic-bezier(0.4, 0, 0.2, 1); 
+            transform: rotate(-90deg); 
+            transform-origin: 50% 50%; 
+        }
+        
+        video { border-radius: 0.75rem; background-color: #000; }
         #app-wrapper { display: none; }
         input:focus { outline: none; }
     </style>
@@ -53,17 +61,19 @@
     <div id="app-wrapper">
         <header class="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-40">
             <div class="max-w-2xl mx-auto px-6 h-16 flex items-center justify-between">
-                <div class="flex items-center gap-3 active:scale-95 transition-transform" onclick="renderPhase(0)">
+                <div class="flex items-center gap-3 active:scale-95 transition-transform cursor-pointer" onclick="renderPhase(0)">
                     <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center shadow-md overflow-hidden border border-slate-100">
-                        <img src="foto-jp.jpg" alt="JP" class="w-full h-full object-cover" onerror="this.innerText='JP';">
+                        <img src="foto-jp.jpg" alt="JP" class="w-full h-full object-cover" onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\'text-white font-black italic text-sm\'>JP</span>';">
                     </div>
                     <div>
                         <span class="block text-[8px] font-black tracking-widest text-slate-400 uppercase">Fisioterapia</span>
                         <span class="block text-xs font-black tracking-tighter text-slate-800 leading-none uppercase">Reabilitação</span>
                     </div>
                 </div>
+                
                 <div class="flex items-center gap-3">
                     <div id="user-button"></div>
+
                     <div class="relative w-10 h-10">
                         <svg class="w-full h-full" viewBox="0 0 100 100">
                             <circle class="text-slate-100 stroke-current" stroke-width="10" cx="50" cy="50" r="40" fill="transparent"></circle>
@@ -88,105 +98,323 @@
             <div id="app-content" class="fade-in"></div>
         </main>
 
-        <nav class="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-lg border-t border-slate-200 p-4 z-50 shadow-lg">
+        <nav class="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-lg border-t border-slate-200 p-4 z-50 shadow-[0_-5px_20px_rgba(0,0,0,0.05)] safe-area-bottom">
             <div class="max-w-2xl mx-auto flex items-center justify-between gap-4">
-                <div class="flex items-center gap-3 cursor-pointer active:scale-90 transition-transform" onclick="toggleChat()">
+                <div class="flex items-center gap-3 shrink-0 cursor-pointer active:scale-90 transition-transform" onclick="toggleChat()">
                     <div class="w-10 h-10 rounded-full bg-green-100 text-green-600 flex items-center justify-center relative shadow-sm">
                         <i data-lucide="message-circle" class="w-5 h-5"></i>
                         <span class="absolute top-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full animate-pulse"></span>
                     </div>
+                    <div class="hidden sm:block">
+                        <p class="text-[10px] font-black text-slate-400 leading-none mb-0.5">DÚVIDAS?</p>
+                        <p class="text-xs font-bold text-slate-700">Assistente</p>
+                    </div>
                 </div>
                 
-                <a href="https://wa.me/5521972183072" target="_blank" onclick="trackClinic('CliqueConsultoriaPremium')" class="flex-1 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-xl active:scale-95 transition-all flex items-center justify-between hover:bg-black group">
+                <a href="https://wa.me/5521972183072" target="_blank" onclick="trackClinic('CliqueConsultoriaPremium')" class="flex-1 bg-slate-900 text-white px-5 py-3 rounded-xl shadow-lg active:scale-95 transition-all flex items-center justify-between hover:bg-black group">
                     <div class="flex flex-col">
-                        <span class="text-[7px] uppercase tracking-[0.2em] text-slate-400 font-bold">Acelere os resultados</span>
+                        <span class="text-[8px] uppercase tracking-widest text-slate-400 group-hover:text-blue-300 transition-colors">Acelere Resultados</span>
                         <span class="text-[11px] font-black flex items-center gap-2">CONSULTORIA PREMIUM</span>
                     </div>
-                    <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i>
+                    <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors">
+                        <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-yellow-400"></i>
+                    </div>
                 </a>
             </div>
         </nav>
 
         <div id="chat-modal" class="fixed inset-0 z-[60] flex items-end sm:items-center justify-center pointer-events-none p-4 bg-black/40 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300">
-            <div class="bg-white w-full max-w-md h-[500px] rounded-3xl shadow-2xl border border-slate-200 flex flex-col pointer-events-auto transform transition-transform translate-y-10">
-                <div class="p-4 border-b flex justify-between items-center bg-blue-600 rounded-t-3xl text-white">
-                    <div class="flex items-center gap-2 text-sm font-bold"><i data-lucide="bot" class="w-4 h-4"></i> Suporte</div>
-                    <button onclick="toggleChat()" class="p-1 hover:bg-white/20 rounded-lg"><i data-lucide="x" class="w-5 h-5"></i></button>
+            <div class="bg-white w-full max-w-md h-[500px] max-h-[80vh] rounded-3xl shadow-2xl border border-slate-200 flex flex-col pointer-events-auto transform transition-transform duration-300 translate-y-10 scale-95">
+                <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-blue-600 rounded-t-3xl text-white">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="bot" class="w-4 h-4"></i>
+                        <h3 class="font-bold text-sm">Suporte Automático</h3>
+                    </div>
+                    <button onclick="toggleChat()" class="p-1 hover:bg-white/20 rounded-lg"><i data-lucide="x" class="w-4 h-4"></i></button>
                 </div>
-                <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50 no-scrollbar"></div>
-                <form onsubmit="sendMessage(event)" class="p-4 bg-white border-t rounded-b-3xl flex gap-2">
-                    <input id="chat-input" type="text" placeholder="Dúvida sobre dor, gelo..." class="flex-1 bg-slate-100 rounded-xl px-4 text-sm">
-                    <button type="submit" class="bg-blue-600 text-white p-3 rounded-xl active:scale-90"><i data-lucide="send" class="w-4 h-4"></i></button>
+                <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50">
+                    <div class="flex justify-start">
+                        <div class="max-w-[85%] p-3 rounded-2xl text-xs leading-relaxed bg-white text-slate-700 shadow-sm border border-slate-200 rounded-bl-none">
+                            Olá! Sou o assistente virtual. Digite palavras como "dor", "gelo", "inchaço" ou "exercício" que eu tento te ajudar!
+                        </div>
+                    </div>
+                </div>
+                <form onsubmit="sendMessage(event)" class="p-3 bg-white border-t border-slate-100 rounded-b-3xl flex gap-2">
+                    <input id="chat-input" type="text" placeholder="Digite sua dúvida..." class="flex-1 bg-slate-100 rounded-xl px-4 text-sm focus:ring-2 focus:ring-blue-500">
+                    <button type="submit" class="bg-blue-600 text-white p-3 rounded-xl active:scale-95"><i data-lucide="send" class="w-4 h-4"></i></button>
                 </form>
             </div>
         </div>
+
     </div>
 
     <script>
-        // --- CORE TRACKING ---
+        // --- RASTREAMENTO TÉCNICO ---
         function trackClinic(eventName, params = {}) {
             if (typeof fbq !== 'undefined') {
-                fbq('trackCustom', eventName, { ...params, pixelID: '1535063944450903' });
+                fbq('trackCustom', eventName, { 
+                    pixelID: '1535063944450903',
+                    ...params 
+                });
             }
         }
 
-        // --- DATA OBJECT (Mantido conforme original) ---
-        const PORTAL_DATA = { /* ... Seus dados de fase aqui ... */ };
+        // --- DADOS DO PORTAL (Original Restaurado) ---
+        const PORTAL_DATA = {
+            0: {
+                title: "👋 Bem-vindo à sua Recuperação",
+                intro: "Você não está sozinho. Este portal contém o método exato para te levar da cirurgia até voltar a andar com segurança.",
+                instructions: "Toque na fase correspondente abaixo para liberar seus exercícios diários.",
+                videoSource: "boas_vindas.mp4",
+                phases_summary: [
+                    { id: 1, icon: "🛡️", title: "Fase 1: Proteção", sub: "Semana 0-4 • Controle e Repouso" },
+                    { id: 2, icon: "👣", title: "Fase 2: Mobilidade", sub: "Liberado pé no chão (Carga Parcial)" },
+                    { id: 3, icon: "💪", title: "Fase 3: Força Total", sub: "Liberado peso total (Largar Muletas)" }
+                ],
+                disclaimer: {
+                    title: "Termos de Uso e Responsabilidade",
+                    text: "Este aplicativo serve como guia de suporte e orientação domiciliar. Ele NÃO substitui o julgamento clínico do seu médico ou fisioterapeuta presencial.",
+                    crefito: "Fisioterapeuta: Dr. João Paulo Cardozo"
+                }
+            },
+            1: {
+                title: "FASE 1: 🛡️ Proteção",
+                subtitle: "Semanas 0 a 4",
+                intro: "Foco absoluto em desinchar e proteger a cirurgia. O objetivo é manter o sangue circulando sem forçar o tornozelo.",
+                introVideoSource: "fase1_intro.mp4",
+                warning: {
+                    title: "🚨 Sinais de Alerta (Triagem)",
+                    intro: "Fique atento a estes sinais que NÃO são normais:",
+                    items: [
+                        { label: "Risco de Trombose", text: "Dor aguda isolada na panturrilha, inchaço repentino e rigidez." },
+                        { label: "Sinais de Infecção", text: "Secreção (pus), vermelhidão ou febre." },
+                        { label: "Circulação", text: "Dedos muito pálidos ou frios." }
+                    ],
+                    footer: "Procure seu médico se notar algo."
+                },
+                regraOuro: "Regra de Ouro: O desconforto leve é normal, mas 'pontadas' agudas na cirurgia não.",
+                achievements: [ "Ferida seca e limpa", "Dormir sem dor intensa", "Inchaço diminui pela manhã", "Mover dedos livremente" ],
+                sections: [
+                    { name: "Protocolo Diário", desc: "🧊 <strong>Gelo:</strong> 20min a cada 4h.\n🦵 <strong>Elevação:</strong> Perna acima do coração.\n🦶 <strong>Movimento:</strong> Mexer dedos sempre.", why: "O básico que funciona. Reduz a inflamação e previne trombose.", dosage: "Todo dia", videoSource: "" },
+                    { name: "1. Bombeamento Isométrico", desc: "Faça força na batata da perna como se quisesse pisar no acelerador, mas SEM deixar o pé mexer. Sinta o músculo endurecer, segure 3s e relaxe.", why: "Sua 'bomba' natural. Empurra o sangue de volta para o coração, diminuindo inchaço.", dosage: "3x 10 reps", videoSource: "fase1_ex1.mp4" },
+                    { name: "2. O 'Pianista'", desc: "Com a perna esticada, tente abrir bem os dedos dos pés e depois fechar com força (como se fosse agarrar um objeto).", why: "Evita que os tendões colem na cicatriz e ajuda a reduzir o edema.", dosage: "3x 15 reps", videoSource: "fase1_ex2.mp4" },
+                    { name: "3. Ativação de Glúteo", desc: "Deitado, aperte uma nádega contra a outra com força. Segure 5s e relaxe.", why: "Mesmo deitado, seu glúteo precisa trabalhar para não atrofiar e manter estabilidade.", dosage: "3x 15 reps", videoSource: "fase1_ex3.mp4" },
+                    { name: "4. Elevação de Perna", desc: "Deitado, trave o joelho (deixe duro) e levante a perna esticada até a altura do outro joelho.", why: "Fortalece a coxa (quadríceps) sem colocar carga nenhuma no tornozelo.", dosage: "3x 10 reps", videoSource: "fase1_ex4.mp4" },
+                    { name: "5. Pé no Chão (Adaptação)", desc: "Sentado, apoie o pé no chão sem peso. Se ficar vermelho/latejar é normal. Comece com 2 min e aumente.", why: "Prepara o sistema vascular para a gravidade antes de começar a andar.", dosage: "2 -> 15 min", videoSource: "fase1_ex5.mp4" }
+                ]
+            },
+            2: {
+                title: "FASE 2: 👣 Mobilidade",
+                subtitle: "Carga Parcial Liberada",
+                intro: "Vamos recuperar o movimento de 90º do tornozelo e ensinar seu pé a receber peso novamente.",
+                introVideoSource: "fase2_intro.mp4",
+                warning: { type: "info", title: "⚠️ Requisito de Segurança", text: "Só faça se o médico liberou Carga Parcial (pisar com auxílio)." },
+                achievements: [ "Pé atinge 90 graus", "Piso com carga parcial sem dor", "Uso tênis confortável", "Iniciei desmame muletas" ],
+                sections: [
+                    { name: "1. Alongamento Toalha", desc: "Sentado, passe uma toalha na ponta do pé. Puxe a toalha trazendo os dedos na sua direção até sentir 'repuxar' a batata da perna.", why: "Recupera a flexibilidade da panturrilha para permitir o passo correto.", dosage: "3x 30s", videoSource: "fase2_ex1.mp4" },
+                    { name: "2. O Acelerador (Livre)", desc: "Leve o pé o máximo para cima (dedos pro nariz) e o máximo para baixo. Tente ganhar 1mm a cada repetição.", why: "Solta a rigidez articular sem estressar os ligamentos laterais.", dosage: "3x 15 reps", videoSource: "fase2_ex2.mp4" },
+                    { name: "3. O Acelerador (Elástico)", desc: "Passe um elástico na ponta do pé. Empurre para baixo contra o elástico e segure a volta lentamente.", why: "Fortalecimento excêntrico: essencial para recuperar a força de absorção de impacto.", dosage: "3x 15 reps", videoSource: "fase2_ex3.mp4" },
+                    { name: "4. A Balança (Descarga)", desc: "Em pé com muletas, transfira levemente o peso para o pé operado (pisando em ovos). Se doer, alivie.", why: "Reeduca o cérebro a aceitar carga no membro operado (propriocepção).", dosage: "3x 1 min", videoSource: "fase2_ex4.mp4" }
+                ]
+            },
+            3: {
+                title: "FASE 3: 💪 Força Total",
+                subtitle: "Retorno à Vida Normal",
+                intro: "Foco em fortalecer a panturrilha e treinar o equilíbrio. Preparação para alta.",
+                introVideoSource: "fase3_intro.mp4",
+                warning: { type: "stop", title: "⛔ Requisito Obrigatório", text: "Exige liberação médica para CARGA TOTAL (pisar sem muletas)." },
+                achievements: [ "Degraus sem apoio", "Fico na ponta dos pés", "Equilíbrio num pé só", "Caminho sem mancar" ],
+                sections: [
+                    { name: "1. Joelho na Parede", desc: "Pé a 10cm da parede. Tente encostar o joelho na parede SEM tirar o calcanhar do chão.", why: "Aumenta a dorsiflexão, fundamental para descer escadas e agachar.", dosage: "3x 12 reps", videoSource: "fase3_ex1.mp4" },
+                    { name: "2. Elevação Calcanhar", desc: "Suba na ponta dos pés (Bipodal). Evolua para um pé só (Unipodal) quando estiver forte.", why: "Fortalece a panturrilha, o 'motor' da caminhada. Evita que você manque.", dosage: "3x 15 reps", videoSource: "fase3_ex2.mp4" },
+                    { name: "3. Mini-Agachamento", desc: "Apoie na cadeira e dobre levemente os joelhos. Não tire calcanhares do chão.", why: "Fortalecimento funcional de quadríceps para sentar e levantar.", dosage: "3x 10 reps", videoSource: "fase3_ex3.mp4" },
+                    { name: "4. O Garça (Equilíbrio)", desc: "Equilibre-se na perna operada. Tente soltar a mão da parede aos poucos.", why: "Treino de equilíbrio para prevenir novas torções no futuro.", dosage: "3x 30s", videoSource: "fase3_ex4.mp4" },
+                    { name: "5. Passo sobre Obstáculo", desc: "Passe a perna boa por cima de um objeto enquanto equilibra na operada.", why: "Desafio avançado de estabilidade dinâmica.", dosage: "3x 10v", videoSource: "fase3_ex5.mp4" }
+                ]
+            }
+        };
 
-        // --- STATE MANAGEMENT ---
-        let userState = JSON.parse(localStorage.getItem('jp_portal_state')) || {};
-        let activePhase = 0;
-
-        // --- AUTH & INIT ---
-        window.addEventListener('load', async () => {
+        // --- SISTEMA CLERK E INICIALIZAÇÃO ---
+        window.addEventListener('load', async function () {
             await Clerk.load();
             if (Clerk.user) {
                 document.getElementById('app-wrapper').style.display = 'block';
-                Clerk.mountUserButton(document.getElementById('user-button'));
+                const userButtonDiv = document.getElementById('user-button');
+                if (userButtonDiv) Clerk.mountUserButton(userButtonDiv);
                 renderPhase(0);
             } else {
-                Clerk.openSignIn({ appearance: { elements: { footer: "hidden" } } });
+                Clerk.openSignIn({
+                    afterSignInUrl: window.location.href,
+                    appearance: { elements: { footer: "hidden" } }
+                });
             }
         });
 
-        // --- RENDERING ENGINE ---
+        // --- ESTADO GLOBAL ---
+        let userState = JSON.parse(localStorage.getItem('jp_portal_state')) || {};
+        let activePhase = 0;
+
+        // --- RENDERIZAÇÃO LÓGICA ---
         function renderPhase(id) {
             activePhase = id;
-            updateNavUI(id);
+            updateNav(id);
             const container = document.getElementById('app-content');
             const data = PORTAL_DATA[id];
             
-            // Tracking Início de Fase
-            trackClinic('InicioFase', { fase_id: id });
+            // Rastreamento: Início de Fase
+            trackClinic('InicioFase', { fase_id: id, fase_nome: data.title });
 
-            // Animação
+            // Animação e Scroll Top
             container.classList.remove('fade-in');
-            void container.offsetWidth;
+            void container.offsetWidth; 
             container.classList.add('fade-in');
-
-            // Scroll suave ao topo
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
             if (id === 0) {
-                renderHome(container, data);
+                // TELA INICIAL
+                let phasesHtml = data.phases_summary.map(p => `
+                    <div onclick="renderPhase(${p.id})" class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm cursor-pointer hover:border-blue-300 hover:shadow-lg hover:-translate-y-1 transition-all flex items-center gap-4 mb-4 group active:scale-95">
+                        <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl shadow-sm group-hover:scale-110 transition-transform">${p.icon}</div>
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-lg">${p.title}</h3>
+                            <p class="text-xs text-slate-500 font-medium">${p.sub}</p>
+                        </div>
+                        <i data-lucide="chevron-right" class="ml-auto text-blue-200 group-hover:text-blue-600"></i>
+                    </div>
+                `).join('');
+
+                container.innerHTML = `
+                    <div class="space-y-6">
+                        <div id="motivation-card" class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-3xl p-6 text-white shadow-lg relative overflow-hidden">
+                             <div class="flex items-center gap-2 mb-2 opacity-80"><i data-lucide="sparkles" class="w-4 h-4"></i><span class="text-[10px] font-black uppercase tracking-widest">Dose Diária</span></div>
+                             <p id="mot-text" class="text-sm font-medium mb-4 opacity-90">Precisa de um empurrãozinho hoje?</p>
+                             <button onclick="getMotivation()" class="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-colors active:scale-95"><i data-lucide="rotate-ccw" class="w-3 h-3"></i> Receber Mensagem</button>
+                        </div>
+                        <div class="bg-white rounded-[2rem] p-8 shadow-xl border border-slate-100 relative overflow-hidden">
+                            <h2 class="text-3xl font-black mb-4 leading-tight text-slate-800">${data.title}</h2>
+                            <p class="text-slate-500 text-sm mb-6 font-medium">${data.intro}</p>
+                            <div class="mb-6 rounded-2xl overflow-hidden shadow-lg bg-black aspect-[9/16] relative max-w-xs mx-auto">
+                                ${getVideoHTML(data.videoSource)}
+                            </div>
+                            <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                                <p class="text-[10px] font-black uppercase text-blue-400 mb-1">Instruções:</p>
+                                <p class="text-xs text-blue-900 font-bold">${data.instructions}</p>
+                            </div>
+                        </div>
+                        <div>${phasesHtml}</div>
+                        <div class="mt-8 p-6 bg-slate-100 rounded-3xl border border-slate-200 text-center">
+                            <h4 class="text-xs font-black text-slate-800 uppercase tracking-widest mb-2">${data.disclaimer.title}</h4>
+                            <p class="text-[11px] text-slate-500 leading-relaxed mb-4 max-w-md mx-auto">${data.disclaimer.text}</p>
+                            <div class="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full border border-slate-200 shadow-sm">
+                                <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                                <p class="text-[10px] font-bold text-slate-700 uppercase">${data.disclaimer.crefito}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
             } else {
-                renderPhaseDetail(container, data, id);
+                // TELAS DE FASE
+                let warningHtml = '';
+                if(data.warning) {
+                    if(data.warning.items) {
+                        warningHtml = `<div class="mt-6 bg-red-50 border-l-4 border-red-400 rounded-r-2xl p-5 shadow-sm">
+                            <div class="flex items-center gap-2 mb-3"><span class="text-xl">🚨</span><h4 class="text-xs font-black text-red-800 uppercase">${data.warning.title}</h4></div>
+                            <p class="text-xs text-red-700 mb-4 opacity-80">${data.warning.intro}</p>
+                            <div class="space-y-3">${data.warning.items.map(i => `<div class="bg-white/60 p-3 rounded-xl border border-red-100"><p class="text-xs font-bold text-red-900 mb-1">${i.label}</p><p class="text-[11px] text-red-700">${i.text}</p></div>`).join('')}</div>
+                        </div>`;
+                    } else {
+                        let color = data.warning.type === 'stop' ? 'red' : 'amber';
+                        warningHtml = `<div class="mt-4 p-4 bg-${color}-50 border-l-4 border-${color}-500 rounded-r-xl shadow-sm flex gap-3 items-center">
+                            <div class="text-2xl">${data.warning.type === 'stop' ? '⛔' : '⚠️'}</div>
+                            <div><p class="text-xs font-bold text-${color}-800 uppercase">${data.warning.title}</p><p class="text-xs text-${color}-700 mt-1">${data.warning.text}</p></div>
+                        </div>`;
+                    }
+                }
+
+                let exercisesHtml = data.sections.map((ex, idx) => {
+                    let hasVideo = ex.videoSource && ex.videoSource !== "";
+                    return `
+                    <div class="bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-sm p-6 mb-4 hover:border-blue-200 transition-colors">
+                        <div class="flex justify-between items-start mb-3 gap-4">
+                            <div class="flex gap-3"><span class="text-slate-300 font-black text-sm">0${idx+1}</span><h4 class="font-black text-slate-800 text-sm italic">${ex.name}</h4></div>
+                            <span class="text-[9px] font-black bg-slate-100 text-slate-600 px-2 py-1 rounded-lg uppercase whitespace-nowrap shrink-0">${ex.dosage}</span>
+                        </div>
+                        <p class="text-slate-500 text-xs leading-relaxed mb-4 pl-7 border-l-2 border-slate-100 whitespace-pre-line">${ex.desc}</p>
+                        ${ex.why ? `<div class="ml-7 mb-4 p-3 bg-amber-50 rounded-xl border border-amber-100 flex gap-2"><i data-lucide="lightbulb" class="w-4 h-4 text-amber-500 shrink-0 mt-0.5"></i><p class="text-[11px] text-amber-800 leading-tight"><strong>Para que serve:</strong> ${ex.why}</p></div>` : ''}
+                        ${hasVideo ? `
+                        <div id="vid-${idx}" class="hidden mb-4 bg-black rounded-xl overflow-hidden aspect-[9/16] max-w-xs mx-auto">
+                            ${getVideoHTML(ex.videoSource)}
+                        </div>
+                        <button onclick="toggleVideo('vid-${idx}')" class="w-full flex items-center justify-center gap-2 bg-slate-900 text-white py-3 rounded-xl text-[10px] font-black uppercase tracking-wider hover:bg-blue-600 transition-colors active:scale-95">
+                            <i data-lucide="play" class="w-3 h-3"></i> Ver Execução
+                        </button>
+                        ` : ''}
+                    </div>
+                `}).join('');
+
+                container.innerHTML = `
+                    <div class="mb-8">
+                        <span class="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-[10px] font-bold uppercase mb-2 tracking-wider shadow-sm">${data.subtitle}</span>
+                        <h2 class="text-3xl font-black text-slate-900 leading-tight mb-3">${data.title}</h2>
+                        <p class="text-slate-600 text-sm leading-relaxed font-medium mb-6">${data.intro}</p>
+                        <div class="mb-6 rounded-2xl overflow-hidden shadow-lg bg-black aspect-[9/16] relative max-w-xs mx-auto">
+                            ${getVideoHTML(data.introVideoSource)}
+                        </div>
+                        ${data.regraOuro ? `<div class="mb-4 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-r-xl shadow-sm"><p class="text-xs text-blue-900 font-bold">💎 ${data.regraOuro}</p></div>` : ''}
+                        ${warningHtml}
+                    </div>
+                    <div class="mb-10 bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
+                        <div class="flex items-center justify-between mb-4 pb-4 border-b border-slate-50">
+                           <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Checklist da Fase</h3>
+                           <span class="text-[10px] font-black text-blue-600 bg-blue-50 px-3 py-1 rounded-full" id="phase-counter">0/0</span>
+                        </div>
+                        <div class="space-y-3">${data.achievements.map((ach, idx) => {
+                            let key = `f${id}_c${idx}`;
+                            return `
+                            <div onclick="toggleAch('${key}', ${id})" class="flex items-start gap-3 p-3 rounded-xl cursor-pointer hover:bg-slate-50 border-l-2 border-transparent hover:border-blue-500 group">
+                                <div class="w-5 h-5 rounded border-2 flex items-center justify-center transition-all ${userState[key] ? 'bg-blue-600 border-blue-600' : 'border-slate-300'}">
+                                    ${userState[key] ? '<i data-lucide="check" class="text-white w-3 h-3"></i>' : ''}
+                                </div>
+                                <label class="text-xs font-bold select-none ${userState[key] ? 'text-slate-400 line-through' : 'text-slate-700'}">${ach}</label>
+                            </div>`
+                        }).join('')}</div>
+                    </div>
+                    <div class="space-y-6">
+                        <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2 mb-4">Exercícios</h3>
+                        ${exercisesHtml}
+                    </div>
+                `;
             }
-            
             lucide.createIcons();
-            updateProgress();
+            updateProgress(); 
+        }
+
+        // --- FUNÇÕES DE LÓGICA & UX ---
+        function updateNav(id) {
+            [0,1,2,3].forEach(i => {
+                let btn = document.getElementById(`btn-${i}`);
+                if (btn) {
+                    if(i === id) {
+                        btn.className = "flex-1 py-3 px-4 rounded-xl text-[10px] font-black transition-all bg-blue-600 text-white shadow-md scale-105";
+                    } else {
+                        btn.className = "flex-1 py-3 px-4 rounded-xl text-[10px] font-black transition-all text-slate-500 hover:bg-white/50";
+                    }
+                }
+            });
         }
 
         function toggleAch(key, phaseId) {
+            // Atualiza estado
             const isChecking = !userState[key];
             userState[key] = isChecking;
             localStorage.setItem('jp_portal_state', JSON.stringify(userState));
             
-            if (isChecking) trackClinic('ConclusaoExercicio', { item: key, fase: phaseId });
+            // Rastreia no Pixel (se marcou)
+            if(isChecking) trackClinic('ConclusaoExercicio', { item: key, fase: phaseId });
 
-            // Update UI local para evitar reload total da fase (Native-like)
+            // Atualiza UI Localmente (Sem reload total para manter scroll)
             const row = document.querySelector(`[onclick="toggleAch('${key}', ${phaseId})"]`);
-            if (row) {
+            if(row) {
                 const box = row.querySelector('.w-5');
                 const label = row.querySelector('label');
                 box.className = `w-5 h-5 rounded border-2 flex items-center justify-center transition-all ${isChecking ? 'bg-blue-600 border-blue-600' : 'border-slate-300'}`;
@@ -195,19 +423,19 @@
                 lucide.createIcons();
             }
 
-            updateProgress();
             if(isChecking) checkCelebration(phaseId);
+            updateProgress();
         }
 
-        function updateNavUI(id) {
-            [0,1,2,3].forEach(i => {
-                const btn = document.getElementById(`btn-${i}`);
-                if (btn) {
-                    btn.className = i === id 
-                        ? "flex-1 py-3 px-4 rounded-xl text-[10px] font-black bg-blue-600 text-white shadow-md scale-105 transition-all"
-                        : "flex-1 py-3 px-4 rounded-xl text-[10px] font-black text-slate-500 hover:bg-white/50 transition-all";
-                }
+        function checkCelebration(phaseId) {
+            const achievements = PORTAL_DATA[phaseId].achievements;
+            let allChecked = true;
+            achievements.forEach((_, idx) => {
+                if (!userState[`f${phaseId}_c${idx}`]) allChecked = false;
             });
+            if (allChecked) {
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            }
         }
 
         function updateProgress() {
@@ -215,21 +443,114 @@
             Object.keys(PORTAL_DATA).forEach(k => {
                 if(k != 0 && PORTAL_DATA[k].achievements) {
                     PORTAL_DATA[k].achievements.forEach((_, i) => {
-                        total++; if(userState[`f${k}_c${i}`]) done++;
+                        total++;
+                        if(userState[`f${k}_c${i}`]) done++;
                     });
                 }
             });
-            const perc = total === 0 ? 0 : Math.round((done/total)*100);
+            
+            let perc = total === 0 ? 0 : Math.round((done/total)*100);
             document.getElementById('global-progress-text').innerText = perc + "%";
+            
             const circle = document.getElementById('progress-ring');
-            const circumference = 40 * 2 * Math.PI;
-            circle.style.strokeDashoffset = circumference - (perc / 100) * circumference;
+            if(circle) {
+                const circumference = 251.2; // 2 * pi * 40
+                const offset = circumference - (perc / 100) * circumference;
+                circle.style.strokeDashoffset = offset;
+            }
         }
 
-        // --- SECURITY ---
-        document.addEventListener('contextmenu', e => e.preventDefault());
-        document.onkeydown = e => {
-            if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 73)) return false;
+        function toggleVideo(id) {
+            let el = document.getElementById(id);
+            if(el) {
+                el.classList.toggle('hidden');
+                let video = el.querySelector('video');
+                if(video && el.classList.contains('hidden')) video.pause();
+            }
+        }
+
+        function getVideoHTML(source) {
+            if(!source) return `<div class="w-full h-full flex flex-col items-center justify-center text-slate-500"><i data-lucide="video" class="w-8 h-8 mb-2 opacity-50"></i><span class="text-[10px] font-bold uppercase">Sem Vídeo</span></div>`;
+            return `<video src="${source}" controls playsinline class="w-full h-full object-cover"></video>`;
+        }
+
+        // --- SISTEMAS DE SUPORTE (CHAT & MOTIVAÇÃO) ---
+        const motivationQuotes = [
+            "Cada passo conta. Hoje melhor que ontem! 💪", "A dor é passageira, a glória é eterna. 🚀",
+            "Respeite o processo. Seu corpo sabe o que faz. 🌱", "Você é mais forte do que essa lesão. 🦁",
+            "Paciência é o músculo que você mais precisa treinar hoje. 🧘‍♂️", "Foco no objetivo: voltar a fazer o que ama! 🎯"
+        ];
+
+        function getMotivation() {
+            let btn = document.querySelector('#motivation-card button');
+            let txt = document.getElementById('mot-text');
+            btn.disabled = true;
+            btn.innerHTML = `<i data-lucide="loader-2" class="animate-spin w-3 h-3"></i>`;
+            setTimeout(() => {
+                const randomMsg = motivationQuotes[Math.floor(Math.random() * motivationQuotes.length)];
+                txt.innerText = randomMsg;
+                txt.classList.add('font-bold', 'text-lg');
+                btn.disabled = false;
+                btn.innerHTML = `<i data-lucide="rotate-ccw" class="w-3 h-3"></i> Nova Mensagem`;
+                lucide.createIcons();
+            }, 500);
+        }
+
+        const botResponses = [
+            { keywords: ["dor", "dói", "doendo"], response: "Dor leve a moderada é normal. Se for dor aguda (pontada) ou não passar com remédio, pare e faça gelo. Se persistir, avise seu médico." },
+            { keywords: ["inchaço", "inchado", "edema"], response: "Inchaço é esperado. Protocolo: Gelo (20min) + Perna elevada + Mexer dedos dos pés." },
+            { keywords: ["gelo", "frio"], response: "Faça 20 minutos de gelo a cada 4 horas se tiver dor/inchaço. Nunca direto na pele." },
+            { keywords: ["muleta", "andar"], response: "Só largue as muletas quando seu médico liberar 'Carga Total'. Respeite a fase de Carga Parcial." },
+            { keywords: ["banho", "molhar"], response: "Proteja o curativo! Use saco plástico bem vedado até retirar os pontos." },
+            { keywords: ["ola", "oi", "bom dia"], response: "Olá! Como posso ajudar na sua recuperação hoje?" }
+        ];
+
+        function toggleChat() {
+            let modal = document.getElementById('chat-modal');
+            let content = modal.querySelector('div');
+            if(modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    content.classList.remove('translate-y-10', 'scale-95');
+                }, 10);
+            } else {
+                modal.classList.add('opacity-0');
+                content.classList.add('translate-y-10', 'scale-95');
+                setTimeout(() => modal.classList.add('hidden'), 300);
+            }
+        }
+
+        function sendMessage(e) {
+            e.preventDefault();
+            let input = document.getElementById('chat-input');
+            let text = input.value.toLowerCase().trim();
+            if(!text) return;
+            let chatBox = document.getElementById('chat-messages');
+            
+            chatBox.innerHTML += `<div class="flex justify-end"><div class="max-w-[85%] p-3 rounded-2xl text-xs leading-relaxed bg-blue-600 text-white rounded-br-none">${input.value}</div></div>`;
+            input.value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            let loadingId = 'load-' + Date.now();
+            chatBox.innerHTML += `<div id="${loadingId}" class="flex justify-start"><div class="p-3"><i data-lucide="loader-2" class="animate-spin text-blue-500 w-4 h-4"></i></div></div>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            setTimeout(() => {
+                document.getElementById(loadingId).remove();
+                let reply = "Desculpe, ainda estou aprendendo. Para dúvidas médicas específicas, consulte o Dr. João no WhatsApp.";
+                for (let item of botResponses) {
+                    if (item.keywords.some(k => text.includes(k))) { reply = item.response; break; }
+                }
+                chatBox.innerHTML += `<div class="flex justify-start"><div class="max-w-[85%] p-3 rounded-2xl text-xs leading-relaxed bg-white text-slate-700 shadow-sm border border-slate-200 rounded-bl-none">${reply}</div></div>`;
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 800);
+        }
+
+        // --- SEGURANÇA ---
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.onkeydown = function(e) {
+            if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 73) || (e.ctrlKey && e.keyCode == 85) || (e.ctrlKey && e.keyCode == 83)) return false;
         };
     </script>
 </body>
